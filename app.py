@@ -5,7 +5,7 @@ from flask import Flask
 from flask import request
 from flask import render_template
 
-from model.post import Post
+from model.ad import Ad
 from model.user import User
 from errors import register_error_handlers
 
@@ -18,47 +18,47 @@ auth = init_basic_auth()
 register_error_handlers(app)
 
 
-@app.route("/api/posts", methods = ["POST"])
-def create_post():
-    post_data = request.get_json(force=True, silent=True)
-    if post_data == None:
+@app.route("/api/ads", methods = ["POST"])
+def create_ad():
+    ad_data = request.get_json(force=True, silent=True)
+    if ad_data == None:
         return "Bad request", 400
-    post = Post(post_data["title"], post_data["content"])
-    post.save()
-    return json.dumps(post.to_dict()), 201
+    ad = Ad(ad_data["title"], ad_data["content"])
+    ad.save()
+    return json.dumps(ad.to_dict()), 201
 
 
-@app.route("/api/posts", methods = ["GET"])
-def list_posts():
+@app.route("/api/ads", methods = ["GET"])
+def list_ads():
     result = {"result": []}
-    for post in Post.all():
-        result["result"].append(post.to_dict())
+    for ad in Ad.all():
+        result["result"].append(ad.to_dict())
     return json.dumps(result)
 
 
-@app.route("/api/posts/<post_id>", methods = ["GET"])
-def get_post(post_id):
-    return json.dumps(Post.find(post_id).to_dict())
+@app.route("/api/ads/<ad_id>", methods = ["GET"])
+def get_ad(ad_id):
+    return json.dumps(Ad.find(ad_id).to_dict())
 
 
-@app.route("/api/posts/<post_id>", methods = ["DELETE"])
-def delete_post(post_id):
-    Post.delete(post_id)
+@app.route("/api/ads/<ad_id>", methods = ["DELETE"])
+def delete_ad(ad_id):
+    Ad.delete(ad_id)
     return ""
 
 
-@app.route("/api/posts/<post_id>", methods = ["PATCH"])
-def update_post(post_id):
-    post_data = request.get_json(force=True, silent=True)
-    if post_data == None:
+@app.route("/api/ads/<ad_id>", methods = ["PATCH"])
+def update_ad(ad_id):
+    ad_data = request.get_json(force=True, silent=True)
+    if ad_data == None:
         return "Bad request", 400
 
-    post = Post.find(post_id)
-    if "title" in post_data:
-        post.title = post_data["title"]
-    if "content" in post_data:
-        post.content = post_data["content"]
-    return json.dumps(post.save().to_dict())
+    ad = Ad.find(ad_id)
+    if "title" in ad_data:
+        ad.title = ad_data["title"]
+    if "content" in ad_data:
+        ad.content = ad_data["content"]
+    return json.dumps(ad.save().to_dict())
 
 
 @app.route("/api/users", methods = ["POST"])
@@ -74,13 +74,12 @@ def create_user():
 
 @app.route("/", methods = ["GET"])
 @auth.login_required
-def posts():
+def ads():
     return render_template("index.html")
 
 
-@app.route("/posts/<post_id>", methods = ["GET"])
-def view_post(post_id):
-    return render_template("post.html", post=Post.find(post_id))
-
+@app.route("/ads/<ad_id>", methods = ["GET"])
+def view_ad(ad_id):
+    return render_template("ad.html", ad=Ad.find(ad_id))
 
 
