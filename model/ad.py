@@ -1,4 +1,4 @@
-#from database import SQLite
+from database import SQLite
 #from errors import ApplicationError
 
 class Ad(object):
