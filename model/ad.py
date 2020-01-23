@@ -53,12 +53,13 @@ class Ad(object):
     def __get_save_query(self):
         query = "{} INTO ad {} VALUES {}"
         if self.id == None:
-            args = (self.title, self.content)
-            query = query.format("INSERT", "(title, content)", args)
+            args = (self.title, self.content, self.price, self.release_date, self.is_active, self.buyer)
+            query = query.format("INSERT", "(title, content, price, release_date, is_active, buyer)", args)
         else:
-            args = (self.id, self.title, self.content)
-            query = query.format("REPLACE", "(id, title, content)", args)
+            args = (self.id, self.title, self.content, self.price, self.release_date, self.is_active, self.buyer)
+            query = query.format("REPLACE", "(id, title, content, price, release_date, is_active, buyer)", args)
         return query
+
 
 
 
