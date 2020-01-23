@@ -61,6 +61,14 @@ def update_ad(ad_id):
         ad.title = ad_data["title"]
     if "content" in ad_data:
         ad.content = ad_data["content"]
+    if "price" in ad_data:
+        ad.content = ad_data["price"]
+    if "release_date" in ad_data:
+        ad.content = ad_data["release_date"]
+    if "is_active" in ad_data:
+        ad.content = ad_data["is_active"]
+    if "buyer" in ad_data:
+        ad.content = ad_data["buyer"]
     return json.dumps(ad.save().to_dict())
 
 
@@ -84,5 +92,6 @@ def ads():
 @app.route("/ads/<ad_id>", methods = ["GET"])
 def view_ad(ad_id):
     return render_template("ad.html", ad=Ad.find(ad_id))
+
 
 
