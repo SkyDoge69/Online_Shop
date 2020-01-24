@@ -46,7 +46,8 @@ def get_ad(ad_id):
 
 @app.route("/api/ads/<ad_id>", methods = ["DELETE"])
 def delete_ad(ad_id):
-    Ad.delete(ad_id)
+    ad = Ad.find(ad_id)
+    ad.delete(ad_id)
     return ""
 
 
@@ -62,13 +63,13 @@ def update_ad(ad_id):
     if "content" in ad_data:
         ad.content = ad_data["content"]
     if "price" in ad_data:
-        ad.content = ad_data["price"]
+        ad.price = ad_data["price"]
     if "release_date" in ad_data:
-        ad.content = ad_data["release_date"]
+        ad.release_date = ad_data["release_date"]
     if "is_active" in ad_data:
-        ad.content = ad_data["is_active"]
+        ad.is_active = ad_data["is_active"]
     if "buyer" in ad_data:
-        ad.content = ad_data["buyer"]
+        ad.buyer = ad_data["buyer"]
     return json.dumps(ad.save().to_dict())
 
 

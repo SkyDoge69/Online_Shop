@@ -11,7 +11,7 @@ class Ad(object):
         self.release_date = release_date
         self.is_active = is_active
         self.buyer = buyer
-
+	
     def to_dict(self):
         return self.__dict__
 
@@ -35,7 +35,7 @@ class Ad(object):
         result = None
         with SQLite() as db:
             result = db.execute(
-                    "SELECT title, content, id FROM ad WHERE id = ?",
+                    "SELECT title, content, price, release_date, is_active, buyer, id FROM ad WHERE id = ?",
                     (ad_id,))
         ad = result.fetchone()
         if ad is None:
@@ -47,7 +47,7 @@ class Ad(object):
     def all():
         with SQLite() as db:
             result = db.execute(
-                    "SELECT title, content, id FROM ad").fetchall()
+                    "SELECT title, content, price, release_date, is_active, buyer, id FROM ad").fetchall()
             return [Ad(*row) for row in result]
 
     def __get_save_query(self):
@@ -59,7 +59,6 @@ class Ad(object):
             args = (self.id, self.title, self.content, self.price, self.release_date, self.is_active, self.buyer)
             query = query.format("REPLACE", "(id, title, content, price, release_date, is_active, buyer)", args)
         return query
-
 
 
 
