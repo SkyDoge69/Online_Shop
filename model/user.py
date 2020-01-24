@@ -4,10 +4,14 @@ from database import SQLite
 
 class User(object):
 
-    def __init__(self, username, password, user_id=None):
+    def __init__(self, username, password, name, adress, mobile_number, user_id=None):
         self.id = user_id
         self.username = username
         self.password = password
+        self.name = name
+        self.adress = adress
+        self.mobile_number = mobile_number
+
 
     def to_dict(self):
         user_data = self.__dict__
@@ -34,7 +38,7 @@ class User(object):
         result = None
         with SQLite() as db:
             result = db.execute(
-                    "SELECT username, password, id FROM user WHERE id = ?",
+                    "SELECT username, password, name, adress, mobile_number, id FROM user WHERE id = ?",
                     (user_id,))
         user = result.fetchone()
         if user is None:
@@ -47,7 +51,7 @@ class User(object):
         result = None
         with SQLite() as db:
             result = db.execute(
-                    "SELECT username, password, id FROM user WHERE username = ?",
+                    "SELECT username, password, name, adress, mobile_number, id FROM user WHERE username = ?",
                     (username,))
         user = result.fetchone()
         if user is None:
@@ -59,17 +63,17 @@ class User(object):
     def all():
         with SQLite() as db:
             result = db.execute(
-                    "SELECT username, password, id FROM user").fetchall()
+                    "SELECT username, password, name, adress, mobile_number, id FROM user").fetchall()
             return [User(*row) for row in result]
 
     def __get_save_query(self):
         query = "{} INTO user {} VALUES {}"
         if self.id == None:
-            args = (self.username, self.password)
-            query = query.format("INSERT", "(username, password)", args)
+            args = (self.username, self.password, self.name, self.adress, self.mobile_number)
+            query = query.format("INSERT", "(username, password, name, adress, mobile_number)", args)
         else:
-            args = (self.id, self.username, self.password)
-            query = query.format("REPLACE", "(id, username, password)", args)
+            args = (self.id, self.username, self.password, self.name, self.adress, self.mobile_number)
+            query = query.format("REPLACE", "(id, username, password, name, adress, mobile_number)", args)
         return query
 
 

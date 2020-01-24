@@ -9,15 +9,15 @@ from model.ad import Ad
 from model.user import User
 from errors import register_error_handlers
 
-#from security.basic_authentication import generate_password_hash
-#from security.basic_authentication import init_basic_auth
+from security.basic_authentication import generate_password_hash
+from security.basic_authentication import init_basic_auth
 
 #zakomentirah vsi4ko s auth da vidq
 #export FLASK_APP=app.py && flask run
 
 
 app = Flask(__name__)
-#auth = init_basic_auth()
+auth = init_basic_auth()
 register_error_handlers(app)
 
 
@@ -79,13 +79,13 @@ def create_user():
     if user_data == None:
         return "Bad request", 400
     hashed_password = generate_password_hash(user_data["password"])
-    user = User(user_data["username"], hashed_password)
+    user = User(user_data["username"], hashed_password, user_data["name"], user_data["adress"], user_data["mobile_number"])
     user.save()
     return json.dumps(user.to_dict()), 201
 
 
 @app.route("/", methods = ["GET"])
-#@auth.login_required
+@auth.login_required
 def ads():
     return render_template("index.html")
 

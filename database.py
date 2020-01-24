@@ -24,7 +24,10 @@ CREATE TABLE IF NOT EXISTS user
     (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT NOT NULL UNIQUE,
-        password TEXT NOT NULL
+        password TEXT NOT NULL,
+        name TEXT,
+        adress TEXT,
+        mobile_number TEXT
     )
 ''')
 conn.commit()
