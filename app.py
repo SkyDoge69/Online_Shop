@@ -87,6 +87,30 @@ def create_user():
 @app.route("/api/users/<user_id>", methods = ["GET"])
 def get_user(user_id):
     return json.dumps(User.find(user_id).to_dict())
+    
+    
+@app.route("/api/users", methods = ["GET"])
+def list_users():
+    result = {"result": []}
+    for user in User.all():
+        result["result"].append(user.to_dict())
+    return json.dumps(result)
+    
+
+@app.route("/api/users/<user_id>", methods = ["PATCH"])
+def update_user(user_id):
+    user_data = request.get_json(force=True, silent=True)
+    if user_data == None:
+        return "Bad request", 400
+
+    user = User.find(user_id)
+    if "name" in user_data:
+        user.name = user_data["name"]
+    if "adress" in user_data:
+        user.adress = user_data["adress"]
+    if "mobile_number" in user_data:
+        user.mobile_number = user_data["mobile_number"]
+    return json.dumps(user.save().to_dict())
 
 
 @app.route("/", methods = ["GET"])
