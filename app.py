@@ -82,6 +82,11 @@ def create_user():
     user = User(user_data["email"], hashed_password, user_data["name"], user_data["adress"], user_data["mobile_number"])
     user.save()
     return json.dumps(user.to_dict()), 201
+    
+    
+@app.route("/api/users/<user_id>", methods = ["GET"])
+def get_user(user_id):
+    return json.dumps(User.find(user_id).to_dict())
 
 
 @app.route("/", methods = ["GET"])
