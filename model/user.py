@@ -1,12 +1,12 @@
 from database import SQLite
-#from errors import ApplicationError
+from errors import ApplicationError
 
 
 class User(object):
 
-    def __init__(self, username, password, name, adress, mobile_number, user_id=None):
+    def __init__(self, email, password, name, adress, mobile_number, user_id=None):
         self.id = user_id
-        self.username = username
+        self.email = email
         self.password = password
         self.name = name
         self.adress = adress
@@ -38,7 +38,7 @@ class User(object):
         result = None
         with SQLite() as db:
             result = db.execute(
-                    "SELECT username, password, name, adress, mobile_number, id FROM user WHERE id = ?",
+                    "SELECT email, password, name, adress, mobile_number, id FROM user WHERE id = ?",
                     (user_id,))
         user = result.fetchone()
         if user is None:
@@ -47,33 +47,33 @@ class User(object):
         return User(*user)
 
     @staticmethod
-    def find_by_username(username):
+    def find_by_email(email):
         result = None
         with SQLite() as db:
             result = db.execute(
-                    "SELECT username, password, name, adress, mobile_number, id FROM user WHERE username = ?",
-                    (username,))
+                    "SELECT email, password, name, adress, mobile_number, id FROM user WHERE email = ?",
+                    (email,))
         user = result.fetchone()
         if user is None:
             raise ApplicationError(
-                    "Post with name {} not found".format(username), 404)
+                    "Post with name {} not found".format(email), 404)
         return User(*user)
 
     @staticmethod
     def all():
         with SQLite() as db:
             result = db.execute(
-                    "SELECT username, password, name, adress, mobile_number, id FROM user").fetchall()
+                    "SELECT email, password, name, adress, mobile_number, id FROM user").fetchall()
             return [User(*row) for row in result]
 
     def __get_save_query(self):
         query = "{} INTO user {} VALUES {}"
         if self.id == None:
-            args = (self.username, self.password, self.name, self.adress, self.mobile_number)
-            query = query.format("INSERT", "(username, password, name, adress, mobile_number)", args)
+            args = (self.email, self.password, self.name, self.adress, self.mobile_number)
+            query = query.format("INSERT", "(email, password, name, adress, mobile_number)", args)
         else:
-            args = (self.id, self.username, self.password, self.name, self.adress, self.mobile_number)
-            query = query.format("REPLACE", "(id, username, password, name, adress, mobile_number)", args)
+            args = (self.id, self.email, self.password, self.name, self.adress, self.mobile_number)
+            query = query.format("REPLACE", "(id, email, password, name, adress, mobile_number)", args)
         return query
 
 

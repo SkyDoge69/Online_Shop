@@ -79,7 +79,7 @@ def create_user():
     if user_data == None:
         return "Bad request", 400
     hashed_password = generate_password_hash(user_data["password"])
-    user = User(user_data["username"], hashed_password, user_data["name"], user_data["adress"], user_data["mobile_number"])
+    user = User(user_data["email"], hashed_password, user_data["name"], user_data["adress"], user_data["mobile_number"])
     user.save()
     return json.dumps(user.to_dict()), 201
 
