@@ -1,5 +1,5 @@
 from database import SQLite
-#from errors import ApplicationError
+from errors import ApplicationError
 
 class Ad(object):
 
