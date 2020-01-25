@@ -113,6 +113,13 @@ def update_user(user_id):
     return json.dumps(user.save().to_dict())
 
 
+@app.route("/api/users/<user_id>", methods = ["DELETE"])
+def delete_user(user_id):
+    user = User.find(user_id)
+    user.delete(user_id)
+    return ""
+    
+
 @app.route("/", methods = ["GET"])
 @auth.login_required
 def ads():
