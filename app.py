@@ -132,15 +132,20 @@ def view_ad(ad_id):
 
 @app.route("/api/ads/<user_id>/<ad_id>", methods = ["PATCH"])
 def buy_ad(user_id, ad_id):
-    user_data = request.get_json(force=True, silent=True)    
     ad = Ad.find(ad_id)
     user = User.find(user_id)
     ad.is_active = 0
-    ad.buyer = user_data["name"]
+    ad.buyer = user.name
     return json.dumps(ad.save().to_dict())
 
 
-#@app.route("/api/users/<user_id>/sold", methods = ["PATCH"])
-#def sold_ads(user_id):
-	
-
+@app.route("/api/users/sold/<user_id>", methods = ["GET"])
+def sold_ads(user_id):
+    result = {"result": []}
+    for ad in Ad.all():
+        if ad.creator_id == int(user_id):
+            if ad.is_active == 0:
+                result["result"].append(ad.to_dict())
+    return json.dumps(result)
+            
+            
