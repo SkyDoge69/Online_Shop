@@ -6,20 +6,6 @@ DB_NAME = "example.db"
 conn = sqlite.connect(DB_NAME)
 
 conn.cursor().execute('''
-CREATE TABLE IF NOT EXISTS ad
-    (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT,
-        content TEXT,
-        price INTEGER,
-        release_date TEXT,
-        is_active INTEGER,
-        buyer TEXT
-    )
-''')
-conn.commit()
-
-conn.cursor().execute('''
 CREATE TABLE IF NOT EXISTS user
     (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -31,6 +17,23 @@ CREATE TABLE IF NOT EXISTS user
     )
 ''')
 conn.commit()
+
+conn.cursor().execute('''
+CREATE TABLE IF NOT EXISTS ad
+    (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT,
+        content TEXT,
+        price INTEGER,
+        release_date TEXT,
+        is_active INTEGER,
+        buyer TEXT,
+        creator_id INTEGER,
+        FOREIGN KEY(creator_id) REFERENCES user(id)
+    )
+''')
+conn.commit()
+
 
 class SQLite(object):
 

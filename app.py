@@ -12,7 +12,6 @@ from errors import register_error_handlers
 from security.basic_authentication import generate_password_hash
 from security.basic_authentication import init_basic_auth
 
-#zakomentirah vsi4ko s auth da vidq
 #export FLASK_APP=app.py && flask run
 
 
@@ -20,13 +19,14 @@ app = Flask(__name__)
 auth = init_basic_auth()
 register_error_handlers(app)
 
+user_ad_comp = False
 
 @app.route("/api/ads", methods = ["POST"])
 def create_ad():
     ad_data = request.get_json(force=True, silent=True)
     if ad_data == None:
         return "Bad request", 400
-    ad = Ad(ad_data["title"], ad_data["content"], ad_data["price"], ad_data["release_date"], ad_data["is_active"], ad_data["buyer"])
+    ad = Ad(ad_data["title"], ad_data["content"], ad_data["price"], ad_data["release_date"], ad_data["is_active"], ad_data["buyer"], ad_data["creator_id"])
     ad.save()
     return json.dumps(ad.to_dict()), 201
 
@@ -137,7 +137,10 @@ def buy_ad(user_id, ad_id):
     user = User.find(user_id)
     ad.is_active = 0
     ad.buyer = user_data["name"]
-    
     return json.dumps(ad.save().to_dict())
 
+
+#@app.route("/api/users/<user_id>/sold", methods = ["PATCH"])
+#def sold_ads(user_id):
+	
 

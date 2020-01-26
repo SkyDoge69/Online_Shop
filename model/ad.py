@@ -3,7 +3,7 @@ from errors import ApplicationError
 
 class Ad(object):
 
-    def __init__(self, title, content, price, release_date, is_active, buyer, ad_id=None):
+    def __init__(self, title, content, price, release_date, is_active, buyer, creator_id, ad_id=None):
         self.id = ad_id
         #self.user_id = user_id
         self.title = title
@@ -12,6 +12,7 @@ class Ad(object):
         self.release_date = release_date
         self.is_active = is_active
         self.buyer = buyer
+        self.creator_id = creator_id
 	
     def to_dict(self):
         return self.__dict__
@@ -36,7 +37,7 @@ class Ad(object):
         result = None
         with SQLite() as db:
             result = db.execute(
-                    "SELECT title, content, price, release_date, is_active, buyer, id FROM ad WHERE id = ?",
+                    "SELECT title, content, price, release_date, is_active, buyer, creator_id, id FROM ad WHERE id = ?",
                     (ad_id,))
         ad = result.fetchone()
         if ad is None:
@@ -48,17 +49,17 @@ class Ad(object):
     def all():
         with SQLite() as db:
             result = db.execute(
-                    "SELECT title, content, price, release_date, is_active, buyer, id FROM ad").fetchall()
+                    "SELECT title, content, price, release_date, is_active, buyer, creator_id, id FROM ad").fetchall()
             return [Ad(*row) for row in result]
 
     def __get_save_query(self):
         query = "{} INTO ad {} VALUES {}"
         if self.id == None:
-            args = (self.title, self.content, self.price, self.release_date, self.is_active, self.buyer)
-            query = query.format("INSERT", "(title, content, price, release_date, is_active, buyer)", args)
+            args = (self.title, self.content, self.price, self.release_date, self.is_active, self.buyer, self.creator_id)
+            query = query.format("INSERT", "(title, content, price, release_date, is_active, buyer, creator_id)", args)
         else:
-            args = (self.id, self.title, self.content, self.price, self.release_date, self.is_active, self.buyer)
-            query = query.format("REPLACE", "(id, title, content, price, release_date, is_active, buyer)", args)
+            args = (self.id, self.title, self.content, self.price, self.release_date, self.is_active, self.buyer, self.creator_id)
+            query = query.format("REPLACE", "(id, title, content, price, release_date, is_active, buyer, creator_id)", args)
         return query
 
 
