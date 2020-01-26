@@ -5,6 +5,7 @@ class Ad(object):
 
     def __init__(self, title, content, price, release_date, is_active, buyer, ad_id=None):
         self.id = ad_id
+        #self.user_id = user_id
         self.title = title
         self.content = content
         self.price = price

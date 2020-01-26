@@ -130,5 +130,14 @@ def ads():
 def view_ad(ad_id):
     return render_template("ad.html", ad=Ad.find(ad_id))
 
+@app.route("/api/ads/<user_id>/<ad_id>", methods = ["PATCH"])
+def buy_ad(user_id, ad_id):
+    user_data = request.get_json(force=True, silent=True)    
+    ad = Ad.find(ad_id)
+    user = User.find(user_id)
+    ad.is_active = 0
+    ad.buyer = user_data["name"]
+    
+    return json.dumps(ad.save().to_dict())
 
 
