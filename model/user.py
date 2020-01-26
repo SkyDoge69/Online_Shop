@@ -43,7 +43,7 @@ class User(object):
         user = result.fetchone()
         if user is None:
             raise ApplicationError(
-                    "Post with id {} not found".format(user_id), 404)
+                    "User with id {} not found".format(user_id), 404)
         return User(*user)
 
     @staticmethod
@@ -56,7 +56,7 @@ class User(object):
         user = result.fetchone()
         if user is None:
             raise ApplicationError(
-                    "Post with name {} not found".format(email), 404)
+                    "User with name {} not found".format(email), 404)
         return User(*user)
 
     @staticmethod
