@@ -5,12 +5,13 @@
     </head>
     <body>
         <div>
-            <h3> {{ ad.title }} </h3>
-            <p> {{ ad.content }} </p>
-			<p> {{ ad.price }} </p>
-			<p> {{ ad.release_date }} </p>
-			<p> {{ ad.is_active }} </p>
-			<p> {{ ad.buyer }} </p>
+            <h3> Title: {{ ad.title }} </h3>
+            <p> Content: {{ ad.content }} </p>
+			<p> Price: {{ ad.price }} </p>
+			<p> Release date: {{ ad.release_date }} </p>
+			<p> Is it active (0 - false, 1 - true): {{ ad.is_active }} </p>
+			<p> Buyer name (empty if ad is active): {{ ad.buyer }} </p>
+			<p> Creator id: {{ ad.creator_id }} </p>
         </div>
         <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
     </body>
