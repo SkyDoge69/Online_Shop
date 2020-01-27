@@ -15,9 +15,6 @@ from security.basic_authentication import init_basic_auth
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-# export FLASK_APP=app.py && flask run
-
-
 app = Flask(__name__)
 auth = init_basic_auth()
 register_error_handlers(app)
