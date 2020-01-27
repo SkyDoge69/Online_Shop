@@ -105,7 +105,6 @@ def create_user():
 
 
 @app.route("/api/users/<user_id>", methods=["GET"])
-@auth.login_required
 def get_user(user_id):
     return jsonify(User.find(user_id).to_dict())
 
