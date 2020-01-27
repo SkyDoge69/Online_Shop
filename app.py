@@ -11,6 +11,8 @@ from errors import register_error_handlers
 
 from security.basic_authentication import generate_password_hash
 from security.basic_authentication import init_basic_auth
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 #export FLASK_APP=app.py && flask run
 
@@ -20,6 +22,12 @@ auth = init_basic_auth()
 register_error_handlers(app)
 
 user_ad_comp = False
+
+@auth.verify_password
+def verify_password(email, password):
+    if email in [user.email for user in User.all()]:
+        return check_password_hash(User.find_by_email(email).password, password)
+    return False
 
 @app.route("/api/ads", methods = ["POST"])
 def create_ad():
