@@ -4,6 +4,7 @@ import uuid
 from flask import Flask
 from flask import request
 from flask import render_template
+from flask import jsonify
 
 from model.ad import Ad
 from model.user import User
@@ -32,7 +33,7 @@ def create_ad():
     ad = Ad(ad_data["title"], ad_data["content"], ad_data["price"], ad_data["release_date"],
             ad_data["is_active"], ad_data["buyer"], ad_data["creator_id"])
     ad.save()
-    return json.dumps(ad.to_dict()), 201
+    return jsonify(ad.to_dict()), 201
 
 
 @app.route("/api/ads", methods=["GET"])
@@ -40,12 +41,12 @@ def list_ads():
     result = {"result": []}
     for ad in Ad.all():
         result["result"].append(ad.to_dict())
-    return json.dumps(result)
+    return jsonify(result)
 
 
 @app.route("/api/ads/<ad_id>", methods=["GET"])
 def get_ad(ad_id):
-    return json.dumps(Ad.find(ad_id).to_dict())
+    return jsonify(Ad.find(ad_id).to_dict())
 
 
 @app.route("/api/ads/<ad_id>", methods=["DELETE"])
@@ -84,8 +85,8 @@ def update_ad(ad_id):
         if "is_active" in ad_data:
             ad.is_active = ad_data["is_active"]
         if "buyer" in ad_data:
-            ad.buyer = ad_data["buyer"]
-        return json.dumps(ad.save().to_dict()), 201
+            ad.buyer_id = ad_data["buyer"]
+        return jsonify(ad.save().to_dict()), 201
 
     else:
         return "Permission denied", 401
@@ -100,13 +101,13 @@ def create_user():
     user = User(user_data["email"], hashed_password, user_data["name"],
                 user_data["adress"], user_data["mobile_number"])
     user.save()
-    return json.dumps(user.to_dict()), 201
+    return jsonify(user.to_dict()), 201
 
 
 @app.route("/api/users/<user_id>", methods=["GET"])
 @auth.login_required
 def get_user(user_id):
-    return json.dumps(User.find(user_id).to_dict())
+    return jsonify(User.find(user_id).to_dict())
 
 
 @app.route("/api/users", methods=["GET"])
@@ -114,7 +115,7 @@ def list_users():
     result = {"result": []}
     for user in User.all():
         result["result"].append(user.to_dict())
-    return json.dumps(result), 201
+    return jsonify(result), 201
 
 
 @app.route("/api/users/<user_id>", methods=["PATCH"])
@@ -130,7 +131,7 @@ def update_user(user_id):
         user.adress = user_data["adress"]
     if "mobile_number" in user_data:
         user.mobile_number = user_data["mobile_number"]
-    return json.dumps(user.save().to_dict()), 201
+    return jsonify(user.save().to_dict()), 201
 
 
 @app.route("/api/users/<user_id>", methods=["DELETE"])
@@ -156,10 +157,10 @@ def buy_ad(user_id, ad_id):
     ad = Ad.find(ad_id)
     user = User.find(user_id)
     ad.is_active = 0
-    ad.buyer = user.name
-    return json.dumps(ad.save().to_dict())
+    ad.buyer_id = user.name
+    return jsonify(ad.save().to_dict())
 
 
 @app.route("/api/users/sold/<user_id>", methods=["GET"])
 def sold_ads(user_id):
-    return json.dumps([ad.to_dict() for ad in Ad.all() if (ad.creator_id == int(user_id) and not ad.is_active)])
+    return jsonify([ad.to_dict() for ad in Ad.all() if (ad.creator_id == int(user_id) and not ad.is_active)])

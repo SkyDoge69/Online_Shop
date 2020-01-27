@@ -27,9 +27,10 @@ CREATE TABLE IF NOT EXISTS ad
         price INTEGER,
         release_date TEXT,
         is_active INTEGER,
-        buyer TEXT,
         creator_id INTEGER,
-        FOREIGN KEY(creator_id) REFERENCES user(id)
+        buyer_id INTEGER,
+        FOREIGN KEY(creator_id) REFERENCES user(id),
+        FOREIGN KEY(buyer_id) REFERENCES user(id)
     )
 ''')
 conn.commit()
