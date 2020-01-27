@@ -23,4 +23,3 @@ def init_basic_auth():
     auth = HTTPBasicAuth()
     auth.verify_password(__verify_password)
     return auth
-
