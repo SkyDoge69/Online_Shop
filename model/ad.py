@@ -51,7 +51,7 @@ class Ad(object):
             result = db.execute(
                     "SELECT title, content, price, release_date, is_active, buyer_id, creator_id, id FROM ad").fetchall()
             return [Ad(*row) for row in result]
-
+	
     def __get_save_query(self):
         query = "{} INTO ad {} VALUES {}"
         if self.id == None:
@@ -61,6 +61,4 @@ class Ad(object):
             args = (self.id, self.title, self.content, self.price, self.release_date, self.is_active, self.buyer_id, self.creator_id)
             query = query.format("REPLACE", "(id, title, content, price, release_date, is_active, buyer_id, creator_id)", args)
         return query
-
-
 
